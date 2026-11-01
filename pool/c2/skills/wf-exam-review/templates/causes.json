@@ -1,0 +1,29 @@
+{
+  "schema": "wf-exam-review/causes",
+  "version": "1.0",
+  "note": "오답 '원인' 축의 정본. 내용 축(과목:단원 태그)과 직교한다. 주제로 복사한 뒤 subject_profiles는 실제 오답으로 채운다.",
+
+  "confidence": [
+    { "id": "sure",    "label": "확신",     "meaning": "맞다고 확신하고 골랐는데 틀림", "diagnosis": "오개념. 스스로 안다고 믿어 다시 공부하지 않으므로 가장 위험", "policy": { "first_interval_days": 1, "require_correct_streak": 2, "priority": 1 } },
+    { "id": "half",    "label": "반신반의", "meaning": "둘로 좁혔는데 틀린 쪽을 고름", "diagnosis": "구별 실패", "policy": { "first_interval_days": 2, "require_correct_streak": 2, "priority": 2 } },
+    { "id": "guess",   "label": "찍음",     "meaning": "모르고 찍음(맞았어도 기록)", "diagnosis": "지식 부재. 배우고 나서 재출제", "policy": { "first_interval_days": 1, "require_correct_streak": 2, "priority": 2, "requires_learning_first": true } },
+    { "id": "timeout", "label": "시간부족", "meaning": "풀 수 있었는데 시간이 없었음", "diagnosis": "전략 · 속도 문제. 재출제보다 실전 타이머 훈련", "policy": { "first_interval_days": 7, "require_correct_streak": 1, "priority": 3 } },
+    { "id": "unknown", "label": "미기록",   "meaning": "확신도를 묻지 못함(지난 시험 소급 입력 등)", "diagnosis": "한 축이 비어 우선순위가 부정확", "policy": { "first_interval_days": 2, "require_correct_streak": 2, "priority": 2 }, "note": "소급 입력은 전부 unknown이 된다. 정책이 없으면 일정 계산이 멈춘다" }
+  ],
+
+  "causes": [
+    { "id": "C1", "label": "문제해석", "desc": "발문 · 조건을 놓치거나 잘못 읽음", "signals": ["부정형 발문을 놓침", "단서 조건 하나를 빠뜨림", "구하라는 것과 다른 값을 답함"], "remedy": "구할 것과 조건을 먼저 표시하고, 다 풀고 발문에 되돌아가 대조", "retest_bias_days": 0, "cross_subject_flag": true },
+    { "id": "C2", "label": "지식부재", "desc": "개념 · 사실을 모름", "signals": ["용어가 처음", "공식 · 연도 · 규칙을 모름"], "remedy": "먼저 학습 → 그 다음 재출제(학습 없이 다시 물으면 또 찍는다)", "retest_bias_days": 0, "requires_learning_first": true },
+    { "id": "C3", "label": "지식혼동", "desc": "비슷한 둘 이상을 구별하지 못함", "signals": ["A와 B를 바꿔 씀", "시기를 뒤바꿈"], "remedy": "헷갈린 쌍을 나란히 놓고 차이 한 줄 쓰기", "retest_bias_days": -1, "pair_required": true, "cross_subject_flag": true },
+    { "id": "C4", "label": "적용실패", "desc": "개념은 아는데 이 상황에 꺼내지 못함", "signals": ["겉모습이 바뀌자 못 품", "어떤 도구를 쓸지 결정하지 못함"], "remedy": "같은 개념 · 다른 외형의 변형 문제, 풀기 전에 유형을 먼저 말하기", "retest_bias_days": 1 },
+    { "id": "C5", "label": "실행오류", "desc": "방향은 맞았는데 처리에서 틀림", "signals": ["계산 · 부호 · 옮겨 적기", "단위"], "remedy": "개념 재학습 불필요. 검산 루틴과 자기 실수 체크리스트", "retest_bias_days": 3 },
+    { "id": "C6", "label": "시간전략", "desc": "배분 · 순서 문제", "signals": ["뒤 문제를 못 봄", "한 문제에 매달림"], "remedy": "실전 타이머 + 문제 순서 전략", "retest_bias_days": 7, "low_priority": true },
+    { "id": "C7", "label": "자료해석", "desc": "표 · 그래프 · 사료 · 지문에서 필요한 정보를 못 뽑음", "signals": ["축 · 단위 오독", "지문에 근거가 있는데 못 찾음"], "remedy": "자료에 직접 표시하며 읽기, 보기마다 근거 위치 지목", "retest_bias_days": 0, "cross_subject_flag": true },
+    { "id": "C8", "label": "순서·연대", "desc": "사건 · 절차의 시간 순서 감각 부재", "signals": ["나열 순서를 뒤바꿈", "인과 선후를 반대로 봄"], "remedy": "연표 · 흐름도에 직접 배열", "retest_bias_days": 0 }
+  ],
+
+  "subject_profiles": {
+    "_how": "과목마다 dominant(자주 나오는 원인 순서)와 extra_fields를 둔다. 예상으로 채우지 말고 실제 오답 레코드가 쌓인 뒤 primary 원인 건수로 정한다.",
+    "_example": { "dominant": [], "extra_fields": [] }
+  }
+}

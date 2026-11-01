@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기업 시나리오 분석</title>
+  <!-- 배포 때마다 ?v= 값을 올린다(캐시). 회사별 문구는 data.js에서만 바꾼다. -->
+  <link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1 id="title">로딩…</h1>
+      <p id="subtitle"></p>
+    </div>
+    <div class="actions">
+      <span id="genstamp" class="sub"></span>
+      <button id="themeBtn" class="themebtn">☀ 라이트</button>
+      <button id="printBtn">🖨 PDF로 저장</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 히어로 + 주가 차트 -->
+    <section class="panel hero-panel">
+      <div id="hero" class="hero"></div>
+      <div class="chartbox">
+        <div class="chart-h">주가 추이 <span class="sub">(종가)</span></div>
+        <div class="pxctl" id="pxCtl">
+          <div class="pxbtns">
+            <button data-p="6M">6개월</button><button data-p="1Y">1년</button><button data-p="3Y" class="on">3년</button><button data-p="10Y">10년</button><button data-p="ALL">전체</button>
+          </div>
+          <div class="pxdate">
+            <input type="date" id="pxFrom"><span>~</span><input type="date" id="pxTo"><button id="pxApply">적용</button>
+          </div>
+          <button id="pxRefresh" class="refbtn">↻ 최근종가 갱신</button>
+          <span id="pxStatus" class="sub"></span>
+        </div>
+        <div id="priceStats" class="pxstats"></div>
+        <div id="priceChart"></div>
+      </div>
+    </section>
+
+    <!-- 실적/배당 시각화 -->
+    <section class="panel">
+      <h2>1. 실적 · 배당 한눈에</h2>
+      <p id="estCap" class="sub estcap"></p>
+      <div class="grid2">
+        <div class="cb"><div class="chart-h">연간 매출 <span class="sub">(조원)</span></div><div id="revChart"></div></div>
+        <div class="cb"><div class="chart-h">영업이익률 <span class="sub">(%)</span></div><div id="opChart"></div></div>
+        <div class="cb"><div class="chart-h">분기 매출</div><div id="qChart"></div></div>
+        <div class="cb"><div class="chart-h">주당배당금 DPS <span class="sub">(원)</span></div><div id="dpsChart"></div></div>
+      </div>
+      <div class="cb" id="regionBox"><div class="chart-h" id="regionTitle">지역별 매출 비중</div><div id="regionChart"></div></div>
+    </section>
+
+    <!-- 기업 개요 (선택) -->
+    <section class="panel" id="sec-profile">
+      <h2>2. 사업 구조 & 연혁</h2>
+      <div id="profile" class="profile"></div>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <!-- 시나리오 추정 -->
+    <section class="panel" id="sec-scenario">
+      <h2>3. 시나리오 추정 <span class="sub" id="scnSub"></span></h2>
+      <p class="sub" id="scnNote"><b>점 예측이 아니라 밴드</b>입니다. 슬라이더는 맨 아래 '고급 수동'에 있습니다.</p>
+      <p id="scnDriver" class="driver"></p>
+
+      <h3 class="subh" id="scnH">① 실적 시나리오 (순이익)</h3>
+      <div id="scnTabs" class="seg"></div>
+      <div id="scnDetail" class="scndetail"></div>
+
+      <h3 class="subh" id="polH">② 배당 정책 전제</h3>
+      <div id="polTabs" class="seg"></div>
+      <div id="polDetail"></div>
+
+      <div id="combo" class="combo"></div>
+      <div id="scnTriggers" class="triggers"></div>
+
+      <h3 class="subh" id="bandH">주가 밴드 매트릭스 (시나리오 × PER)</h3>
+      <div id="priceBandTbl"></div>
+
+      <details class="adv" id="adv">
+        <summary>⚙ 고급: 수동 조정 (자유 실험)</summary>
+        <p class="sub">아래 배당값은 <b>단순 payout 공식</b>이라 점진 배당 정책을 쓰는 회사에서는 과대추정됩니다.</p>
+        <div class="split">
+          <div class="left">
+            <div id="presets" class="presets"></div>
+            <div id="sliders"></div>
+          </div>
+          <div class="right">
+            <div class="resgrid">
+              <div class="rescard"><h3>연간 실적 (환산)</h3><div id="pnl"></div></div>
+              <div class="rescard hot"><h3>배당 (단순 payout)</h3><div id="divbox"></div></div>
+            </div>
+            <div class="rescard wide"><h3>주가 추정 (4개 모델)</h3><div id="targets"></div></div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 현금흐름의 함정 (선택) -->
+    <section class="panel" id="sec-cashflow">
+      <h2>4. 현금흐름 <span class="sub">— 이익 ≠ 배당</span></h2>
+      <p id="cfNote" class="cfnote"></p>
+      <div class="grid2">
+        <div class="cb"><div class="chart-h">영업활동 현금흐름 OCF <span class="sub">(억)</span></div><div id="cfChart"></div></div>
+        <div class="cb"><div class="chart-h">재무 스트레스</div><div id="balStress"></div></div>
+      </div>
+    </section>
+
+    <!-- 추적 대시보드 (선택) -->
+    <section class="panel" id="sec-track">
+      <h2>5. 추적 대시보드 <span class="sub">— 분기마다 확인</span></h2>
+      <div id="trackGrid" class="trackgrid"></div>
+      <div id="nextCat" class="nextcat"></div>
+    </section>
+
+    <!-- 이벤트 달력 (선택) -->
+    <section class="panel" id="sec-calendar">
+      <h2>6. 이벤트 달력 <span class="sub" id="calRange"></span></h2>
+      <p class="sub" id="calNote">★ = 추정의 분기점.</p>
+      <div id="calLegend" class="callegend"></div>
+      <div id="calendar" class="calwrap"></div>
+    </section>
+
+    <!-- 논지 -->
+    <section class="panel">
+      <h2>7. 논지 & 경계</h2>
+      <div id="narrative" class="narrative"></div>
+    </section>
+
+    <!-- 출처 -->
+    <section class="panel">
+      <h2>8. 출처</h2>
+      <ol id="sources" class="sources"></ol>
+      <p class="sub">⚠️ <span class="assref-legend">주황색 [n]</span> = 외부 출처가 아닌 분석 가정값. <span id="srcNote"></span></p>
+    </section>
+
+    <footer class="ftr sub">equity-scenario-app · 데이터 = assets/data.js · 본 자료는 투자 참고용이며 투자 권유가 아닙니다.</footer>
+  </main>
+
+  <script src="assets/price.js?v=1"></script>
+  <script src="assets/data.js?v=1"></script>
+  <script src="assets/engine.js?v=1"></script>
+</body>
+</html>

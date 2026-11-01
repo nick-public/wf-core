@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ▼▼ 프로젝트마다 제목/설명만 바꾸세요 ▼▼ -->
+<title>학습 앱</title>
+<meta name="description" content="자료 원문·챕터 해설·퀴즈·생각해볼 주제·연관 주제·산출물 가이드를 담은 학습 앱.">
+<!-- ▲▲ ----------------------------- ▲▲ -->
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand" id="brand">학습 앱<small id="brand-sub"></small></div>
+    <ul class="nav" id="nav"></ul>
+    <button class="btn ghost menu-btn" id="menu-btn">☰ 메뉴</button>
+    <div class="progress-wrap">
+      <div id="prog-text">챕터 0/0 읽음</div>
+      <div class="mini-bar"><div id="prog-bar"></div></div>
+    </div>
+  </aside>
+  <main class="main">
+    <section class="section" id="sec-home"></section>
+    <section class="section" id="sec-sources"></section>
+    <section class="section" id="sec-chapters"></section>
+    <section class="section" id="sec-quiz"></section>
+    <section class="section" id="sec-think"></section>
+    <section class="section" id="sec-related"></section>
+    <section class="section" id="sec-guide"></section>
+    <div class="footer" id="footer">학습용 · 진행 상황은 이 브라우저에 저장됩니다.</div>
+  </main>
+</div>
+<script src="assets/content.js"></script>
+<script>
+  // 사이드바 브랜드/푸터를 content.js 값으로 채움
+  if (typeof SUBJECT !== "undefined") {
+    document.getElementById("brand").firstChild.textContent = SUBJECT.brand || SUBJECT.title || "학습 앱";
+    if (SUBJECT.brandSub) document.getElementById("brand-sub").textContent = SUBJECT.brandSub;
+    document.title = SUBJECT.title || document.title;
+  }
+  if (typeof FOOTER !== "undefined") document.getElementById("footer").textContent = FOOTER;
+</script>
+<script src="assets/app.js"></script>
+</body>
+</html>
